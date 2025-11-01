@@ -1,4 +1,4 @@
-# Frontend-Backend Connectivity Analysis
+psql -U project_admin -d medicare -f db/generate_random_data.sql# Frontend-Backend Connectivity Analysis
 
 ## 🎯 Summary
 
