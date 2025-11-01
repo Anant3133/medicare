@@ -1,0 +1,626 @@
+{
+  "info": {
+    "name": "Medicare API",
+    "_postman_id": "medicare-hospital-api",
+    "description": "Complete API collection for Medicare Hospital Management System - demonstrating DBMS concepts",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.data.token);",
+                  "    console.log('Token saved:', response.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with username and password. Default credentials: admin/admin123"
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"password123\",\n  \"role\": \"staff\",\n  \"email\": \"newuser@medicare.com\",\n  \"full_name\": \"New User\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?limit=50&offset=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {"key": "limit", "value": "50"},
+                {"key": "offset", "value": "0"},
+                {"key": "search", "value": "John", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Patient History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/1/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "1", "history"]
+            },
+            "description": "Demonstrates: Using views for complex queries"
+          }
+        },
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Patient\",\n  \"dob\": \"1990-01-01\",\n  \"gender\": \"M\",\n  \"phone\": \"555-9999\",\n  \"address\": \"123 Test St\",\n  \"emergency_contact\": \"555-8888\",\n  \"blood_group\": \"O+\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            },
+            "description": "Demonstrates: Parameterized INSERT, constraints validation"
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"555-0000\",\n  \"address\": \"456 Updated St\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admissions",
+      "item": [
+        {
+          "name": "Get All Admissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admissions?status=active",
+              "host": ["{{baseUrl}}"],
+              "path": ["admissions"],
+              "query": [
+                {"key": "status", "value": "active"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Admission by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admissions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admissions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Admission (Stored Procedure)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": 1,\n  \"doctor_id\": 1,\n  \"bed_type\": \"normal\",\n  \"priority\": 3,\n  \"diagnosis\": \"Test admission\",\n  \"notes\": \"For testing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["admissions"]
+            },
+            "description": "Demonstrates: Stored procedure call, automatic bed allocation, waiting list"
+          }
+        },
+        {
+          "name": "Create Manual Admission (Transaction)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": 2,\n  \"bed_id\": 5,\n  \"doctor_id\": 2,\n  \"priority\": 2,\n  \"diagnosis\": \"Manual admission test\",\n  \"notes\": \"Testing transaction\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admissions/manual",
+              "host": ["{{baseUrl}}"],
+              "path": ["admissions", "manual"]
+            },
+            "description": "Demonstrates: Transaction with row-level locking (SELECT FOR UPDATE)"
+          }
+        },
+        {
+          "name": "Discharge Patient",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admissions/1/discharge",
+              "host": ["{{baseUrl}}"],
+              "path": ["admissions", "1", "discharge"]
+            },
+            "description": "Demonstrates: Stored procedure, trigger-based bed status update"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Beds",
+      "item": [
+        {
+          "name": "Get All Beds",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/beds",
+              "host": ["{{baseUrl}}"],
+              "path": ["beds"],
+              "query": [
+                {"key": "status", "value": "available", "disabled": true},
+                {"key": "type", "value": "icu", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Available Beds",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/beds/available?type=normal",
+              "host": ["{{baseUrl}}"],
+              "path": ["beds", "available"],
+              "query": [
+                {"key": "type", "value": "normal"}
+              ]
+            },
+            "description": "Demonstrates: Stored function call"
+          }
+        },
+        {
+          "name": "Get Bed Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/beds/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["beds", "stats"]
+            },
+            "description": "Demonstrates: Aggregate functions, statistics"
+          }
+        },
+        {
+          "name": "Update Bed Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"maintenance\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/beds/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["beds", "1", "status"]
+            },
+            "description": "Demonstrates: Status updates with constraints"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors"]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "1", "patients"]
+            },
+            "description": "Get all active patients for a specific doctor"
+          }
+        },
+        {
+          "name": "Get Doctor Workload",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/workload/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "workload", "all"]
+            },
+            "description": "Demonstrates: Views for analytics"
+          }
+        },
+        {
+          "name": "Get Departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/departments/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "departments", "all"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "item": [
+        {
+          "name": "Get All Bills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing"],
+              "query": [
+                {"key": "status", "value": "pending"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Bill by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Bill by Admission",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing/admission/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing", "admission", "1"]
+            }
+          }
+        },
+        {
+          "name": "Generate Bill (Stored Procedure)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"admission_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/billing",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing"]
+            },
+            "description": "Demonstrates: Stored procedure for bill generation, automatic calculations"
+          }
+        },
+        {
+          "name": "Mark Bill as Paid",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/billing/1/pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing", "1", "pay"]
+            },
+            "description": "Demonstrates: Trigger updates on status change"
+          }
+        },
+        {
+          "name": "Get Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/billing/services/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["billing", "services", "all"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports & Analytics",
+      "item": [
+        {
+          "name": "Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "dashboard"]
+            },
+            "description": "Demonstrates: Multiple aggregate queries, statistics"
+          }
+        },
+        {
+          "name": "Occupancy Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/occupancy",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "occupancy"]
+            },
+            "description": "Demonstrates: Views for reporting"
+          }
+        },
+        {
+          "name": "Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/revenue?start_date=2024-01-01&limit=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "revenue"],
+              "query": [
+                {"key": "start_date", "value": "2024-01-01"},
+                {"key": "limit", "value": "30"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Waiting List Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/waiting-list",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "waiting-list"]
+            }
+          }
+        },
+        {
+          "name": "Department Statistics (Materialized View)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/departments",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "departments"]
+            },
+            "description": "Demonstrates: Materialized views for performance"
+          }
+        },
+        {
+          "name": "Audit Log",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/audit-log?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "audit-log"],
+              "query": [
+                {"key": "limit", "value": "50"},
+                {"key": "table_name", "value": "patients", "disabled": true},
+                {"key": "operation", "value": "UPDATE", "disabled": true}
+              ]
+            },
+            "description": "Demonstrates: Trigger-based audit logging with JSONB"
+          }
+        },
+        {
+          "name": "Admission Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/admission-trends?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "admission-trends"],
+              "query": [
+                {"key": "days", "value": "30"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

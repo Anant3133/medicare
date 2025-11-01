@@ -1,0 +1,27 @@
+{
+  "name": "medicare",
+  "version": "1.0.0",
+  "description": "Smart Hospital Bed & Patient Allocation System - Full Stack DBMS Project",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run build && npm run preview"
+  },
+  "keywords": [
+    "hospital",
+    "bed-allocation",
+    "dbms",
+    "postgresql",
+    "react",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
