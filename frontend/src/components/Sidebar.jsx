@@ -25,7 +25,7 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="bg-primary-800 text-white w-64 min-h-screen p-4">
+    <div className="bg-primary-800 text-white w-64 min-h-screen p-4 flex flex-col">
       <div className="mb-8">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <FaBed />
@@ -42,7 +42,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <nav className="space-y-2">
+      <nav className="space-y-2 flex-1">
         {filteredMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -66,7 +66,7 @@ const Sidebar = () => {
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-100 hover:bg-red-600 w-full mt-auto absolute bottom-4 left-4 right-4"
+        className="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-100 hover:bg-red-600 hover:text-white transition-colors mt-4"
       >
         <FaSignOutAlt />
         <span>Logout</span>

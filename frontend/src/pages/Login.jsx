@@ -17,18 +17,57 @@ const Login = () => {
     setError('');
     setLoading(true);
 
+    console.log('🔐 Login attempt started...');
+    console.log('📝 Form data:', formData);
+
     try {
+      console.log('📡 Sending login request to backend...');
       const response = await authAPI.login(formData);
+      
+      console.log('✅ Login response received:', response);
+      console.log('📦 Response data:', response.data);
+      
+      // Check response structure
+      if (!response.data || !response.data.data) {
+        console.error('❌ Invalid response structure:', response);
+        throw new Error('Invalid response from server');
+      }
+
       const { token, user } = response.data.data;
       
+      console.log('🎟️ Token received:', token ? 'Yes' : 'No');
+      console.log('👤 User data:', user);
+      
+      if (!token || !user) {
+        console.error('❌ Missing token or user data');
+        throw new Error('Authentication failed - incomplete data');
+      }
+
+      // Store in localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       
+      console.log('💾 Stored in localStorage');
+      console.log('🔑 Token in storage:', localStorage.getItem('token') ? 'Yes' : 'No');
+      console.log('👤 User in storage:', localStorage.getItem('user') ? 'Yes' : 'No');
+      
+      console.log('🚀 Navigating to dashboard...');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      console.error('❌ Login error:', err);
+      console.error('📛 Error response:', err.response);
+      console.error('📛 Error message:', err.message);
+      
+      const errorMessage = err.response?.data?.error 
+        || err.response?.data?.message 
+        || err.message 
+        || 'Login failed. Please check your credentials.';
+      
+      console.error('🔴 Displaying error:', errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
+      console.log('✋ Login process completed');
     }
   };
 
@@ -101,9 +140,10 @@ const Login = () => {
           <p className="text-xs text-gray-600 font-semibold mb-2">Demo Credentials:</p>
           <div className="space-y-1 text-xs text-gray-600">
             <p>Admin: <span className="font-mono">admin / admin123</span></p>
-            <p>Doctor: <span className="font-mono">doctor1 / doctor123</span></p>
-            <p>Staff: <span className="font-mono">staff1 / staff123</span></p>
-            <p>Billing: <span className="font-mono">billing1 / billing123</span></p>
+            <p>Doctor: <span className="font-mono">doctor1 / admin123</span></p>
+            <p>Doctor 2: <span className="font-mono">doctor2 / admin123</span></p>
+            <p>Staff: <span className="font-mono">staff1 / admin123</span></p>
+            <p>Billing: <span className="font-mono">billing1 / admin123</span></p>
           </div>
         </div>
       </div>

@@ -164,13 +164,12 @@ INSERT INTO bill_items (bill_id, service_id, quantity, unit_price) VALUES
 
 -- Insert Users for authentication
 -- Password: admin123 (hashed with bcrypt, rounds=10)
--- In production, these would be properly hashed
 INSERT INTO users (username, password_hash, role, email, full_name, is_active) VALUES
-('admin', '$2b$10$rKvVLbH.xQ8mYH7YqLZ8hOX8bYqPXzDfU0kGXqQHqPXmT9N6fMQYq', 'admin', 'admin@medicare.com', 'System Administrator', true),
-('doctor1', '$2b$10$rKvVLbH.xQ8mYH7YqLZ8hOX8bYqPXzDfU0kGXqQHqPXmT9N6fMQYq', 'doctor', 'doctor1@medicare.com', 'Dr. Sarah Johnson', true),
-('doctor2', '$2b$10$rKvVLbH.xQ8mYH7YqLZ8hOX8bYqPXzDfU0kGXqQHqPXmT9N6fMQYq', 'doctor', 'doctor2@medicare.com', 'Dr. Michael Chen', true),
-('staff1', '$2b$10$rKvVLbH.xQ8mYH7YqLZ8hOX8bYqPXzDfU0kGXqQHqPXmT9N6fMQYq', 'staff', 'staff1@medicare.com', 'Alice Staff', true),
-('billing1', '$2b$10$rKvVLbH.xQ8mYH7YqLZ8hOX8bYqPXzDfU0kGXqQHqPXmT9N6fMQYq', 'billing', 'billing1@medicare.com', 'Bob Billing', true);
+('admin', '$2b$10$zw3hQwpYKwERa311mc2dzun8.JgUy4rK0kDCsC5cpk13TX4EcRQhW', 'admin', 'admin@medicare.com', 'System Administrator', true),
+('doctor1', '$2b$10$zw3hQwpYKwERa311mc2dzun8.JgUy4rK0kDCsC5cpk13TX4EcRQhW', 'doctor', 'doctor1@medicare.com', 'Dr. Sarah Johnson', true),
+('doctor2', '$2b$10$zw3hQwpYKwERa311mc2dzun8.JgUy4rK0kDCsC5cpk13TX4EcRQhW', 'doctor', 'doctor2@medicare.com', 'Dr. Michael Chen', true),
+('staff1', '$2b$10$zw3hQwpYKwERa311mc2dzun8.JgUy4rK0kDCsC5cpk13TX4EcRQhW', 'staff', 'staff1@medicare.com', 'Alice Staff', true),
+('billing1', '$2b$10$zw3hQwpYKwERa311mc2dzun8.JgUy4rK0kDCsC5cpk13TX4EcRQhW', 'billing', 'billing1@medicare.com', 'Bob Billing', true);
 
 -- Refresh materialized view
 REFRESH MATERIALIZED VIEW mv_department_statistics;

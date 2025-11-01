@@ -62,11 +62,15 @@ exports.register = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   
+  console.log('🔐 Login attempt for username:', username);
+  
   if (!username || !password) {
+    console.log('❌ Missing username or password');
     throw new AppError('Please provide username and password', 400);
   }
   
   // Get user by username - demonstrates parameterized query
+  console.log('🔍 Searching for user in database...');
   const result = await query(
     `SELECT user_id, username, password_hash, role, email, full_name, is_active
      FROM users
@@ -74,35 +78,48 @@ exports.login = asyncHandler(async (req, res) => {
     [username]
   );
   
+  console.log('📊 Query result:', result.rows.length, 'user(s) found');
+  
   if (result.rows.length === 0) {
+    console.log('❌ User not found:', username);
     throw new AppError('Invalid credentials', 401);
   }
   
   const user = result.rows[0];
+  console.log('👤 User found:', user.username, '- Role:', user.role, '- Active:', user.is_active);
   
   // Check if user is active
   if (!user.is_active) {
+    console.log('❌ User account is deactivated');
     throw new AppError('Account is deactivated', 401);
   }
   
   // Verify password
+  console.log('🔑 Verifying password...');
   const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+  console.log('🔑 Password valid:', isPasswordValid);
   
   if (!isPasswordValid) {
+    console.log('❌ Invalid password for user:', username);
     throw new AppError('Invalid credentials', 401);
   }
   
   // Update last login
+  console.log('⏰ Updating last login timestamp...');
   await query(
     `UPDATE users SET last_login = now() WHERE user_id = $1`,
     [user.user_id]
   );
   
   // Generate token
+  console.log('🎟️ Generating JWT token...');
   const token = generateToken(user.user_id, user.role);
   
   // Remove password hash from response
   delete user.password_hash;
+  
+  console.log('✅ Login successful for user:', username);
+  console.log('📦 Sending response with token and user data');
   
   res.json({
     success: true,
