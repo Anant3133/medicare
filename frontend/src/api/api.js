@@ -105,6 +105,7 @@ export const reportAPI = {
   getOccupancy: (params) => api.get('/reports/occupancy', { params }),
   getRevenue: (params) => api.get('/reports/revenue', { params }),
   getWaitingList: () => api.get('/reports/waiting-list'),
+  addToWaitingList: (data) => api.post('/reports/waiting-list', data),
   getDoctorWorkload: () => api.get('/reports/doctor-workload'),
   getDepartments: () => api.get('/reports/departments'),
   getAdmissionTrends: (params) => api.get('/reports/admission-trends', { params }),

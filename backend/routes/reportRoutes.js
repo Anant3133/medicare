@@ -5,6 +5,7 @@ const {
   getOccupancyReport,
   getRevenueReport,
   getWaitingListReport,
+  addToWaitingList,
   getDoctorWorkloadReport,
   getDepartmentReport,
   getAdmissionTrends,
@@ -20,6 +21,7 @@ router.get('/dashboard', getDashboardSummary);
 router.get('/occupancy', getOccupancyReport);
 router.get('/revenue', authorize('admin', 'billing'), getRevenueReport);
 router.get('/waiting-list', getWaitingListReport);
+router.post('/waiting-list', addToWaitingList);
 router.get('/doctor-workload', getDoctorWorkloadReport);
 router.get('/departments', getDepartmentReport);
 router.get('/admission-trends', getAdmissionTrends);

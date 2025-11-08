@@ -279,3 +279,34 @@ exports.getDashboardSummary = asyncHandler(async (req, res) => {
     }
   });
 });
+
+/**
+ * Add patient to waiting list
+ * POST /api/reports/waiting-list
+ */
+exports.addToWaitingList = asyncHandler(async (req, res) => {
+  const { patient_id, dept_id, priority, notes } = req.body;
+  
+  // Validate required fields
+  if (!patient_id || !dept_id) {
+    return res.status(400).json({
+      success: false,
+      message: 'Patient ID and Department ID are required'
+    });
+  }
+  
+  // Insert into waiting_list
+  const result = await query(
+    `INSERT INTO waiting_list (patient_id, dept_id, priority, notes, status)
+     VALUES ($1, $2, $3, $4, 'waiting')
+     RETURNING wait_id, patient_id, dept_id, requested_on, priority, status, notes`,
+    [patient_id, dept_id, priority || 3, notes || null]
+  );
+  
+  res.status(201).json({
+    success: true,
+    message: 'Patient added to waiting list successfully',
+    data: result.rows[0]
+  });
+});
+

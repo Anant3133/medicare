@@ -34,9 +34,9 @@ app.use(helmet());
 // Compression
 app.use(compression());
 
-// CORS configuration
+// CORS configuration - Allow both 5173 and 5174
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
 

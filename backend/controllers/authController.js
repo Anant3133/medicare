@@ -23,18 +23,80 @@ const generateToken = (userId, role) => {
  * POST /api/auth/register
  */
 exports.register = asyncHandler(async (req, res) => {
-  const { username, password, role, email, full_name } = req.body;
+  const { username, password, role, email, full_name, roleKey } = req.body;
+  
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('🚀 [BACKEND REGISTER] Registration request received');
+  console.log('📦 [BACKEND] Request body:', { username, email, full_name, role, hasPassword: !!password, hasRoleKey: !!roleKey, roleKeyLength: roleKey?.length });
   
   // Validation
   if (!username || !password || !role) {
+    console.log('❌ [BACKEND] Missing required fields');
     throw new AppError('Please provide username, password, and role', 400);
   }
+
+  if (!roleKey) {
+    console.log('❌ [BACKEND] Missing role key');
+    throw new AppError('Role key is required for registration', 400);
+  }
+  
+  // Validate role key
+  const validRoleKeys = {
+    admin: process.env.ADMIN_KEY,
+    doctor: process.env.DOCTOR_KEY,
+    staff: process.env.STAFF_KEY,
+    billing: process.env.BILLING_KEY
+  };
+
+  console.log('🔑 [BACKEND] Environment keys loaded:', {
+    admin: process.env.ADMIN_KEY,
+    doctor: process.env.DOCTOR_KEY,
+    staff: process.env.STAFF_KEY,
+    billing: process.env.BILLING_KEY
+  });
+  console.log('🔍 [BACKEND] Validating role key for role:', role);
+  console.log('🔍 [BACKEND] Expected key:', validRoleKeys[role]);
+  console.log('🔍 [BACKEND] Received key:', roleKey);
+  console.log('🔍 [BACKEND] Keys match:', roleKey === validRoleKeys[role]);
+
+  if (!validRoleKeys[role]) {
+    console.log('❌ [BACKEND] Invalid role:', role);
+    throw new AppError('Invalid role', 400);
+  }
+
+  if (roleKey !== validRoleKeys[role]) {
+    console.log('❌ [BACKEND] Role key mismatch!');
+    console.log('❌ [BACKEND] Expected:', `"${validRoleKeys[role]}"`, '(length:', validRoleKeys[role]?.length, ')');
+    console.log('❌ [BACKEND] Received:', `"${roleKey}"`, '(length:', roleKey?.length, ')');
+    throw new AppError('Invalid role key. Please contact administrator.', 401);
+  }
+  
+  console.log('✅ [BACKEND] Role key validated successfully');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  // Check if username already exists
+  console.log('🔍 [BACKEND] Checking if username exists:', username);
+  const existingUser = await query(
+    `SELECT user_id FROM users WHERE username = $1`,
+    [username]
+  );
+
+  if (existingUser.rows.length > 0) {
+    console.log('❌ [BACKEND] Username already exists');
+    throw new AppError('Username already exists', 400);
+  }
+  
+  console.log('✅ [BACKEND] Username is available');
   
   // Hash password
+  console.log('🔐 [BACKEND] Hashing password...');
   const salt = await bcrypt.genSalt(10);
   const password_hash = await bcrypt.hash(password, salt);
+  console.log('✅ [BACKEND] Password hashed successfully');
   
   // Insert user - demonstrates parameterized query
+  console.log('💾 [BACKEND] Inserting user into database...');
+  console.log('💾 [BACKEND] Insert params:', { username, role, email, full_name });
   const result = await query(
     `INSERT INTO users (username, password_hash, role, email, full_name)
      VALUES ($1, $2, $3, $4, $5)
@@ -43,7 +105,13 @@ exports.register = asyncHandler(async (req, res) => {
   );
   
   const user = result.rows[0];
+  console.log('✅ [BACKEND] User inserted successfully!');
+  console.log('👤 [BACKEND] New user:', user);
+  
   const token = generateToken(user.user_id, user.role);
+  console.log('🎟️ [BACKEND] JWT token generated');
+  console.log('📤 [BACKEND] Sending success response');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   res.status(201).json({
     success: true,
