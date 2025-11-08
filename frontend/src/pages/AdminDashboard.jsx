@@ -37,13 +37,21 @@ const AdminDashboard = () => {
     if (dashboardData && statsRefs.current.length > 0) {
       statsRefs.current.forEach((stat, index) => {
         if (stat) {
-          gsap.from(stat, {
-            scale: 0.8,
-            opacity: 0,
-            duration: 0.6,
-            delay: index * 0.1,
-            ease: 'back.out(1.7)'
-          });
+          gsap.fromTo(stat, 
+            {
+              scale: 0.8,
+              opacity: 0,
+              y: 30
+            },
+            {
+              scale: 1,
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              delay: index * 0.1,
+              ease: 'back.out(1.7)'
+            }
+          );
         }
       });
 
@@ -234,9 +242,6 @@ const AdminDashboard = () => {
             <motion.div
               key={index}
               ref={el => statsRefs.current[index] = el}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
               className={`card stat-card ${stat.glow} overflow-hidden relative`}
             >

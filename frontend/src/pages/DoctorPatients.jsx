@@ -23,13 +23,21 @@ const DoctorPatients = () => {
     if (stats && statsRefs.current.length > 0) {
       statsRefs.current.forEach((stat, index) => {
         if (stat) {
-          gsap.from(stat, {
-            scale: 0.8,
-            opacity: 0,
-            duration: 0.6,
-            delay: index * 0.1,
-            ease: 'back.out(1.7)'
-          });
+          gsap.fromTo(stat,
+            {
+              scale: 0.8,
+              opacity: 0,
+              y: 30
+            },
+            {
+              scale: 1,
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              delay: index * 0.1,
+              ease: 'back.out(1.7)'
+            }
+          );
         }
       });
 

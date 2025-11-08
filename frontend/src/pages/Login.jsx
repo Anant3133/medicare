@@ -61,7 +61,7 @@ const Login = () => {
     if (glowRef.current) {
       console.log('✨ [Login] Starting GSAP glow animation');
       gsap.to(glowRef.current, {
-        boxShadow: '0 20px 60px rgba(168, 85, 247, 0.4), 0 0 40px rgba(236, 72, 153, 0.2)',
+        boxShadow: '0 20px 60px rgba(59, 130, 246, 0.4), 0 0 40px rgba(6, 182, 212, 0.2)',
         duration: 3,
         repeat: -1,
         yoyo: true,
@@ -295,26 +295,26 @@ const Login = () => {
       {/* Iridescence Background */}
       <div className="absolute inset-0">
         <Iridescence
-          color={[1, 1, 1]}
+          color={[0.1, 0.1, 0.5]}
           mouseReact={false}
-          amplitude={0.1}
-          speed={1.0}
+          amplitude={0.15}
+          speed={1.2}
         />
       </div>
       
       {/* Animated mesh gradient background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Large gradient orbs - inspired by Stripe's mesh gradients */}
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-500 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 dark:opacity-30 animate-blob"></div>
-        <div className="absolute top-0 -right-4 w-96 h-96 bg-amber-400 dark:bg-amber-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 dark:opacity-25 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-400 dark:bg-pink-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 dark:opacity-30 animate-blob animation-delay-4000"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-violet-500 dark:bg-violet-600 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 dark:opacity-25 animate-blob animation-delay-6000"></div>
+        {/* Large gradient orbs - Blue theme gradients */}
+        <div className="absolute top-0 -left-4 w-96 h-96 bg-blue-500 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 dark:opacity-30 animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-96 h-96 bg-cyan-400 dark:bg-cyan-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 dark:opacity-25 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-96 h-96 bg-sky-400 dark:bg-sky-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 dark:opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500 dark:bg-indigo-600 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 dark:opacity-25 animate-blob animation-delay-6000"></div>
         
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: `
-            linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px)
+            linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px)
           `,
           backgroundSize: '100px 100px'
         }}></div>
@@ -328,41 +328,41 @@ const Login = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md px-4"
+        className="relative z-10 w-full max-w-2xl px-4"
       >
         <div
           ref={glowRef}
-          className="bg-white/90 dark:bg-slate-900/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-purple-500/20 relative overflow-hidden"
+          className="bg-white/90 dark:bg-slate-900/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-blue-500/20 relative overflow-hidden"
         >
           {/* Subtle inner glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 dark:from-purple-500/10 via-transparent to-pink-500/5 dark:to-pink-500/10 rounded-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 dark:from-blue-500/10 via-transparent to-cyan-500/5 dark:to-cyan-500/10 rounded-3xl"></div>
           
           <div className="relative z-10">
           {/* Logo and Title */}
           <motion.div
-            className="text-center mb-8"
+            className="text-center mb-6"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           >
             <motion.div
-              className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mb-4 shadow-lg shadow-purple-500/50"
+              className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full mb-4 shadow-lg shadow-blue-500/50"
               whileHover={{ scale: 1.1, rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
               <FaHospital className="text-4xl text-white" />
             </motion.div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Medicare</h1>
-            <p className="text-purple-600 dark:text-purple-200">Hospital Management System</p>
+            <p className="text-blue-600 dark:text-blue-300">Hospital Management System</p>
           </motion.div>
 
           {/* Tab Switcher */}
-          <div className="flex mb-6 bg-gray-100 dark:bg-slate-800/50 rounded-xl p-1 backdrop-blur-sm border border-gray-200 dark:border-purple-500/10">
+          <div className="flex mb-5 bg-gray-100 dark:bg-slate-800/50 rounded-xl p-1 backdrop-blur-sm border border-gray-200 dark:border-blue-500/10">
             <motion.button
               type="button"
-              className={`flex-1 py-3 rounded-lg font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-xl font-semibold transition-all ${
                 !isRegister
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
               }`}
               onClick={() => !isRegister || toggleMode()}
@@ -373,9 +373,9 @@ const Login = () => {
             </motion.button>
             <motion.button
               type="button"
-              className={`flex-1 py-3 rounded-lg font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-xl font-semibold transition-all ${
                 isRegister
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
               }`}
               onClick={() => isRegister || toggleMode()}
@@ -386,7 +386,7 @@ const Login = () => {
             </motion.button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
@@ -406,16 +406,16 @@ const Login = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
             >
-              <label className="block text-sm font-medium text-purple-200 mb-2">
+              <label className="block text-sm font-medium text-blue-200 mb-1.5">
                 Username
               </label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-purple-400">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400">
                   <FaUser />
                 </div>
                 <input
                   type="text"
-                  className="w-full bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all group-hover:border-purple-500/50"
+                  className="w-full bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all group-hover:border-blue-500/50"
                   placeholder="Enter username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -433,16 +433,16 @@ const Login = () => {
                     exit={{ x: 50, opacity: 0 }}
                     transition={{ delay: 0.15 }}
                   >
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                    <label className="block text-sm font-medium text-blue-200 mb-1.5">
                       Full Name
                     </label>
                     <div className="relative group">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-purple-400">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400">
                         <FaIdCard />
                       </div>
                       <input
                         type="text"
-                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all group-hover:border-purple-500/50"
+                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all group-hover:border-blue-500/50"
                         placeholder="Enter full name"
                         value={formData.full_name}
                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
@@ -457,16 +457,16 @@ const Login = () => {
                     exit={{ x: 50, opacity: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                    <label className="block text-sm font-medium text-blue-200 mb-1.5">
                       Email
                     </label>
                     <div className="relative group">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-purple-400">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400">
                         <FaEnvelope />
                       </div>
                       <input
                         type="email"
-                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all group-hover:border-purple-500/50"
+                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all group-hover:border-blue-500/50"
                         placeholder="Enter email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -481,25 +481,25 @@ const Login = () => {
                     exit={{ x: 50, opacity: 0 }}
                     transition={{ delay: 0.25 }}
                   >
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                    <label className="block text-sm font-medium text-blue-200 mb-1.5">
                       Role
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-4 gap-2">
                       {['admin', 'doctor', 'staff', 'billing'].map((role) => (
                         <motion.button
                           key={role}
                           type="button"
-                          className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${
+                          className={`flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl font-medium transition-all ${
                             formData.role === role
-                              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                              : 'bg-slate-800/30 text-gray-300 hover:bg-slate-700/40 border border-purple-500/20'
+                              ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
+                              : 'bg-slate-800/30 text-gray-300 hover:bg-slate-700/40 border border-blue-500/20'
                           }`}
                           onClick={() => setFormData({ ...formData, role })}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
-                          {getRoleIcon(role)}
-                          <span className="capitalize">{role}</span>
+                          <span className="text-lg">{getRoleIcon(role)}</span>
+                          <span className="capitalize text-xs">{role}</span>
                         </motion.button>
                       ))}
                     </div>
@@ -511,34 +511,34 @@ const Login = () => {
                     exit={{ x: 50, opacity: 0 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <label className="block text-sm font-medium text-purple-200 mb-2">
+                    <label className="block text-sm font-medium text-blue-200 mb-1.5">
                       Role Key
                     </label>
                     <div className="relative group">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-purple-400">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400">
                         <FaKey />
                       </div>
                       <input
                         type="text"
-                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all group-hover:border-purple-500/50"
+                        className="w-full bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all group-hover:border-blue-500/50"
                         placeholder={`Enter ${formData.role} key`}
                         value={formData.roleKey}
                         onChange={(e) => setFormData({ ...formData, roleKey: e.target.value })}
                         required
                       />
                     </div>
-                    <p className="text-xs text-purple-300 mt-1">
+                    <p className="text-xs text-blue-300 mt-1">
                       Contact administrator for role-specific key
                     </p>
                     {/* Development helper - show keys */}
                     {import.meta.env.DEV && (
-                      <div className="mt-2 p-2 bg-purple-900/30 rounded-lg border border-purple-500/20">
-                        <p className="text-xs text-purple-200 font-semibold mb-1">🔑 Dev Mode - Role Keys:</p>
-                        <div className="text-xs text-purple-300 space-y-0.5 font-mono">
-                          <p>Admin: <span className="text-purple-400">adminkey</span></p>
-                          <p>Doctor: <span className="text-purple-400">doctorkey</span></p>
-                          <p>Staff: <span className="text-purple-400">staffkey</span></p>
-                          <p>Billing: <span className="text-purple-400">billingkey</span></p>
+                      <div className="mt-2 p-2 bg-blue-900/30 rounded-lg border border-blue-500/20">
+                        <p className="text-xs text-blue-200 font-semibold mb-1">🔑 Dev Mode - Role Keys:</p>
+                        <div className="text-xs text-blue-300 space-y-0.5 font-mono">
+                          <p>Admin: <span className="text-blue-400">adminkey</span></p>
+                          <p>Doctor: <span className="text-blue-400">doctorkey</span></p>
+                          <p>Staff: <span className="text-blue-400">staffkey</span></p>
+                          <p>Billing: <span className="text-blue-400">billingkey</span></p>
                         </div>
                       </div>
                     )}
@@ -552,16 +552,16 @@ const Login = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: isRegister ? 0.35 : 0.2 }}
             >
-              <label className="block text-sm font-medium text-purple-200 mb-2">
+              <label className="block text-sm font-medium text-blue-200 mb-1.5">
                 Password
               </label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-purple-400">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-400">
                   <FaLock />
                 </div>
                 <input
                   type="password"
-                  className="w-full bg-slate-800/50 backdrop-blur-sm border border-purple-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all group-hover:border-purple-500/50"
+                  className="w-full bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 text-white placeholder-gray-400 pl-12 pr-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all group-hover:border-blue-500/50"
                   placeholder="Enter password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -572,7 +572,7 @@ const Login = () => {
 
             <motion.button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
               onClick={(e) => {
                 console.log('🖱️ [BUTTON CLICK] Submit button clicked!');
@@ -581,7 +581,7 @@ const Login = () => {
                 console.log('🖱️ [BUTTON CLICK] Loading state:', loading);
                 console.log('🖱️ [BUTTON CLICK] isRegister:', isRegister);
               }}
-              whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(168, 85, 247, 0.6)' }}
+              whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(59, 130, 246, 0.6)' }}
               whileTap={{ scale: 0.98 }}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -606,14 +606,14 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="mt-6 p-4 bg-slate-800/30 rounded-xl backdrop-blur-sm border border-purple-500/10"
+              className="mt-5 p-3.5 bg-slate-800/30 rounded-xl backdrop-blur-sm border border-blue-500/10"
             >
-              <p className="text-xs text-purple-200 font-semibold mb-2">Demo Credentials:</p>
+              <p className="text-xs text-blue-200 font-semibold mb-2">Demo Credentials:</p>
               <div className="space-y-1 text-xs text-gray-300">
-                <p>Admin: <span className="font-mono text-purple-300">admin / admin123</span></p>
-                <p>Doctor: <span className="font-mono text-purple-300">doctor1 / admin123</span></p>
-                <p>Staff: <span className="font-mono text-purple-300">staff1 / admin123</span></p>
-                <p>Billing: <span className="font-mono text-purple-300">billing1 / admin123</span></p>
+                <p>Admin: <span className="font-mono text-blue-300">admin / admin123</span></p>
+                <p>Doctor: <span className="font-mono text-blue-300">doctor1 / admin123</span></p>
+                <p>Staff: <span className="font-mono text-blue-300">staff1 / admin123</span></p>
+                <p>Billing: <span className="font-mono text-blue-300">billing1 / admin123</span></p>
               </div>
             </motion.div>
           )}
