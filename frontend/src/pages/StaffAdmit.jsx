@@ -25,10 +25,13 @@ const StaffAdmit = () => {
 
   const loadAdmissions = async () => {
     try {
+      console.log('[LOAD ADMISSIONS] Fetching with filter:', filter);
       const response = await admissionAPI.getAll({ status: filter });
+      console.log('[LOAD ADMISSIONS] Received data:', response.data);
+      console.log('[LOAD ADMISSIONS] Number of admissions:', response.data.data.length);
       setAdmissions(response.data.data);
     } catch (error) {
-      console.error('Error loading admissions:', error);
+      console.error('[LOAD ADMISSIONS] Error loading admissions:', error);
     } finally {
       setLoading(false);
     }
@@ -36,11 +39,16 @@ const StaffAdmit = () => {
 
   const handleCreateAdmission = async (data) => {
     try {
-      await admissionAPI.create(data);
+      console.log('[CREATE ADMISSION] Submitting data:', data);
+      const response = await admissionAPI.create(data);
+      console.log('[CREATE ADMISSION] Response:', response.data);
       toast.success('Admission created successfully!');
       setShowForm(false);
-      loadAdmissions();
+      console.log('[CREATE ADMISSION] Reloading admissions...');
+      await loadAdmissions();
+      console.log('[CREATE ADMISSION] Admissions reloaded');
     } catch (error) {
+      console.error('[CREATE ADMISSION] Error:', error);
       toast.error(error.response?.data?.error || 'Failed to create admission');
       throw error;
     }
@@ -85,6 +93,21 @@ const StaffAdmit = () => {
       loadAdmissions();
     } catch (error) {
       toast.error('Error discharging patient: ' + (error.response?.data?.error || error.message));
+    }
+  };
+
+  const handleAssignBed = async (admissionId, bedType) => {
+    try {
+      console.log('[ASSIGN BED] Assigning bed type:', bedType, 'to admission:', admissionId);
+      const response = await admissionAPI.assignBed(admissionId, bedType);
+      console.log('[ASSIGN BED] Success:', response.data);
+      toast.success('Bed assigned successfully!');
+      await loadAdmissions();
+    } catch (error) {
+      console.error('[ASSIGN BED] Error:', error);
+      console.error('[ASSIGN BED] Response data:', error.response?.data);
+      const errorMsg = error.response?.data?.error || error.response?.data?.message || 'Failed to assign bed';
+      toast.error(errorMsg);
     }
   };
 
@@ -234,6 +257,24 @@ const StaffAdmit = () => {
                       >
                         <FaEye /> View
                       </motion.button>
+                      
+                      {/* Show Assign Bed button for waiting admissions */}
+                      {admission.admission_status === 'waiting' && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            const bedType = prompt('Enter bed type:\n- normal\n- icu\n- pediatric\n- maternity', 'normal');
+                            if (bedType) {
+                              handleAssignBed(admission.admission_id, bedType.toLowerCase().trim());
+                            }
+                          }}
+                          className="btn btn-primary btn-sm flex items-center gap-1"
+                        >
+                          <FaBed /> Assign Bed
+                        </motion.button>
+                      )}
+                      
                       {admission.admission_status === 'active' && (
                         <>
                           <motion.button

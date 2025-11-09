@@ -6,6 +6,7 @@ const {
   getAdmissionById,
   createAdmission,
   createManualAdmission,
+  assignBed,
   dischargePatient,
   updateAdmission
 } = require('../controllers/admissionController');
@@ -24,6 +25,7 @@ router.route('/:id')
   .get(getAdmissionById)
   .put(authorize('admin', 'staff', 'doctor'), updateAdmission);
 
+router.put('/:id/assign-bed', authorize('admin', 'staff'), assignBed);
 router.put('/:id/discharge', authorize('admin', 'staff', 'doctor'), dischargePatient);
 
 module.exports = router;

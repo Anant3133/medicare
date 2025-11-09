@@ -25,15 +25,13 @@ const PatientManagement = () => {
     notes: ''
   });
   const [formData, setFormData] = useState({
-    name: '',
+    full_name: '',
     dob: '',
     gender: '',
-    blood_type: '',
+    blood_group: '',
     phone: '',
-    email: '',
     address: '',
-    emergency_contact: '',
-    insurance_id: ''
+    emergency_contact: ''
   });
 
   useEffect(() => {
@@ -91,15 +89,13 @@ const PatientManagement = () => {
   const handleEdit = (patient) => {
     setEditingPatient(patient);
     setFormData({
-      name: patient.name || '',
+      full_name: patient.full_name || '',
       dob: patient.dob ? patient.dob.split('T')[0] : '',
       gender: patient.gender || '',
-      blood_type: patient.blood_type || '',
+      blood_group: patient.blood_group || '',
       phone: patient.phone || '',
-      email: patient.email || '',
       address: patient.address || '',
-      emergency_contact: patient.emergency_contact || '',
-      insurance_id: patient.insurance_id || ''
+      emergency_contact: patient.emergency_contact || ''
     });
     setShowForm(true);
   };
@@ -142,7 +138,7 @@ const PatientManagement = () => {
       };
       
       await reportAPI.addToWaitingList(waitlistPayload);
-      toast.success(`${waitlistPatient.name} added to waiting list!`);
+      toast.success(`${waitlistPatient.full_name} added to waiting list!`);
       setShowWaitlistModal(false);
       setWaitlistPatient(null);
       setWaitlistData({ priority: '3', dept_id: '', notes: '' });
@@ -154,22 +150,20 @@ const PatientManagement = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      full_name: '',
       dob: '',
       gender: '',
-      blood_type: '',
+      blood_group: '',
       phone: '',
-      email: '',
       address: '',
-      emergency_contact: '',
-      insurance_id: ''
+      emergency_contact: ''
     });
   };
 
   const filteredPatients = patients.filter(p =>
-    p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.phone?.includes(searchTerm) ||
-    p.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    p.patient_id?.toString().includes(searchTerm)
   );
 
   const getBloodTypeColor = (type) => {
@@ -266,33 +260,26 @@ const PatientManagement = () => {
                           <FaUser className="text-primary-600 dark:text-primary-400 text-xl" />
                         </motion.div>
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{patient.name}</h3>
+                          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{patient.full_name}</h3>
                           <p className="text-sm text-gray-600 dark:text-slate-400">ID: {patient.patient_id}</p>
                         </div>
                         <motion.span
                           whileHover={{ scale: 1.1 }}
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${getBloodTypeColor(patient.blood_type)}`}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${getBloodTypeColor(patient.blood_group)}`}
                         >
                           <FaTint className="inline mr-1" />
-                          {patient.blood_type}
+                          {patient.blood_group}
                         </motion.span>
                         <span className="badge badge-info capitalize">{patient.gender}</span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 mt-4">
+                      <div className="grid grid-cols-2 gap-4 mt-4">
                         <motion.div
                           whileHover={{ x: 5 }}
                           className="flex items-center gap-2 text-sm"
                         >
                           <FaPhone className="text-gray-400 dark:text-slate-500" />
                           <span className="text-gray-700 dark:text-slate-300">{patient.phone}</span>
-                        </motion.div>
-                        <motion.div
-                          whileHover={{ x: 5 }}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <FaEnvelope className="text-gray-400 dark:text-slate-500" />
-                          <span className="text-gray-700 dark:text-slate-300">{patient.email || 'N/A'}</span>
                         </motion.div>
                         <div className="text-sm">
                           <span className="text-gray-600 dark:text-slate-400">DOB: </span>
@@ -356,8 +343,8 @@ const PatientManagement = () => {
                 </label>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="full_name"
+                  value={formData.full_name}
                   onChange={handleInputChange}
                   required
                   className="input w-full"
@@ -398,11 +385,11 @@ const PatientManagement = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                  Blood Type <span className="text-red-500">*</span>
+                  Blood Group <span className="text-red-500">*</span>
                 </label>
                 <select
-                  name="blood_type"
-                  value={formData.blood_type}
+                  name="blood_group"
+                  value={formData.blood_group}
                   onChange={handleInputChange}
                   required
                   className="input w-full"
@@ -423,29 +410,6 @@ const PatientManagement = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className="input w-full"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Insurance ID</label>
-                <input
-                  type="text"
-                  name="insurance_id"
-                  value={formData.insurance_id}
-                  onChange={handleInputChange}
                   className="input w-full"
                 />
               </div>
@@ -515,7 +479,7 @@ const PatientManagement = () => {
                   <div className="space-y-2">
                     <div>
                       <p className="text-xs text-gray-500 dark:text-slate-400">Full Name</p>
-                      <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.name}</p>
+                      <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.full_name}</p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 dark:text-slate-400">Date of Birth</p>
@@ -528,8 +492,8 @@ const PatientManagement = () => {
                       <p className="font-medium text-gray-800 dark:text-white capitalize">{selectedPatient.gender}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-slate-400">Blood Type</p>
-                      <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.blood_type}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400">Blood Group</p>
+                      <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.blood_group}</p>
                     </div>
                   </div>
                 </div>
@@ -542,10 +506,6 @@ const PatientManagement = () => {
                       <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.phone}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-slate-400">Email</p>
-                      <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.email || 'N/A'}</p>
-                    </div>
-                    <div>
                       <p className="text-xs text-gray-500 dark:text-slate-400">Address</p>
                       <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.address || 'N/A'}</p>
                     </div>
@@ -555,11 +515,6 @@ const PatientManagement = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-3">Insurance</h3>
-                <p className="font-medium text-gray-800 dark:text-white">{selectedPatient.insurance_id || 'No insurance on file'}</p>
               </div>
 
               <div className="flex gap-3 justify-end pt-4 border-t border-gray-200 dark:border-slate-700">
@@ -596,7 +551,7 @@ const PatientManagement = () => {
               setWaitlistPatient(null);
               setWaitlistData({ priority: '3', dept_id: '', notes: '' });
             }}
-            title={`Add ${waitlistPatient.name} to Waiting List`}
+            title={`Add ${waitlistPatient.full_name} to Waiting List`}
           >
             <form onSubmit={handleWaitlistSubmit} className="space-y-4">
               <div>
@@ -682,7 +637,7 @@ const PatientManagement = () => {
           onClose={() => setDeleteConfirm(null)}
           onConfirm={() => handleDelete(deleteConfirm.patient_id)}
           title="Delete Patient"
-          message={`Are you sure you want to delete ${deleteConfirm?.name}? This action cannot be undone.`}
+          message={`Are you sure you want to delete ${deleteConfirm?.full_name}? This action cannot be undone.`}
           confirmText="Delete"
           confirmColor="danger"
         />

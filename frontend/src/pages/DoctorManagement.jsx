@@ -62,6 +62,9 @@ const DoctorManagement = () => {
         doctorAPI.getDepartments(),
         doctorAPI.getAllWorkloads()
       ]);
+      console.log('[DOCTOR MANAGEMENT] Doctors:', doctorsRes.data.data);
+      console.log('[DOCTOR MANAGEMENT] Departments:', deptRes.data.data);
+      console.log('[DOCTOR MANAGEMENT] Workloads:', workloadRes.data.data);
       setDoctors(doctorsRes.data.data);
       setDepartments(deptRes.data.data);
       setWorkloads(workloadRes.data.data);
@@ -444,8 +447,8 @@ const DoctorManagement = () => {
                             className="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                           >
                             <td className="p-3 font-medium text-gray-800 dark:text-white">{workload.doctor_name}</td>
-                            <td className="p-3 text-gray-600 dark:text-slate-400">{doctor?.specialization || 'N/A'}</td>
-                            <td className="p-3 text-gray-600 dark:text-slate-400">{workload.department_name}</td>
+                            <td className="p-3 text-gray-600 dark:text-slate-400">{doctor?.specialization || workload.specialization || 'N/A'}</td>
+                            <td className="p-3 text-gray-600 dark:text-slate-400">{workload.department || 'N/A'}</td>
                             <td className="p-3 text-center">
                               <motion.span
                                 whileHover={{ scale: 1.1 }}

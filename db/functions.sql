@@ -56,16 +56,16 @@ BEGIN
     RAISE EXCEPTION 'No available beds of type % found', p_bed_type;
   END IF;
   
-  -- Update bed status
-  UPDATE beds
-  SET status = 'occupied'
-  WHERE bed_id = v_bed_id;
-  
-  -- Update admission with bed assignment
+  -- Update admission FIRST (while bed is still 'available' so trigger passes)
   UPDATE admissions
   SET bed_id = v_bed_id,
       admission_status = 'active'
   WHERE admission_id = p_admission_id;
+  
+  -- THEN update bed status to occupied
+  UPDATE beds
+  SET status = 'occupied'
+  WHERE bed_id = v_bed_id;
   
   RETURN v_bed_id;
 END;

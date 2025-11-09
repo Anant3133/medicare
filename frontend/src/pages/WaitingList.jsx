@@ -13,10 +13,13 @@ const WaitingList = () => {
 
   const loadWaitingList = async () => {
     try {
+      console.log('[WAITING LIST] Loading waiting list from admissions...');
       const response = await reportAPI.getWaitingList();
+      console.log('[WAITING LIST] Data received:', response.data.data);
+      console.log('[WAITING LIST] Total waiting:', response.data.data.total_waiting);
       setWaitingList(response.data.data);
     } catch (error) {
-      console.error('Error loading waiting list:', error);
+      console.error('[WAITING LIST] Error loading waiting list:', error);
     } finally {
       setLoading(false);
     }
@@ -117,14 +120,18 @@ const WaitingList = () => {
                           )}
                         </div>
                         
-                        <div className="grid grid-cols-3 gap-4 text-sm mt-3">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mt-3">
+                          <div>
+                            <p className="text-gray-600 dark:text-slate-400">Doctor</p>
+                            <p className="font-medium text-gray-800 dark:text-white">{patient.doctor_name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600 dark:text-slate-400">Diagnosis</p>
+                            <p className="font-medium text-gray-800 dark:text-white truncate">{patient.diagnosis || 'N/A'}</p>
+                          </div>
                           <div>
                             <p className="text-gray-600 dark:text-slate-400">Phone</p>
                             <p className="font-medium text-gray-800 dark:text-white">{patient.patient_phone}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600 dark:text-slate-400">Emergency Contact</p>
-                            <p className="font-medium text-gray-800 dark:text-white">{patient.emergency_contact || 'N/A'}</p>
                           </div>
                           <div>
                             <p className="text-gray-600 dark:text-slate-400">Waiting Time</p>

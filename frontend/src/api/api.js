@@ -61,6 +61,7 @@ export const admissionAPI = {
   getById: (id) => api.get(`/admissions/${id}`),
   create: (data) => api.post('/admissions', data),
   createManual: (data) => api.post('/admissions/manual', data),
+  assignBed: (id, bedType) => api.put(`/admissions/${id}/assign-bed`, { bed_type: bedType }),
   discharge: (id) => api.put(`/admissions/${id}/discharge`),
   update: (id, data) => api.put(`/admissions/${id}`, data),
 };

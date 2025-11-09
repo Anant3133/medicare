@@ -93,15 +93,41 @@ exports.getRevenueReport = asyncHandler(async (req, res) => {
  * GET /api/reports/waiting-list
  */
 exports.getWaitingListReport = asyncHandler(async (req, res) => {
-  const result = await query(`SELECT * FROM v_waiting_list`);
+  console.log('[WAITING LIST REPORT] Fetching waiting admissions...');
+  
+  // Get admissions with 'waiting' status (patients waiting for beds)
+  const result = await query(`
+    SELECT 
+      a.admission_id,
+      a.admitted_on as requested_on,
+      a.priority,
+      a.diagnosis,
+      a.notes,
+      EXTRACT(HOUR FROM (now() - a.admitted_on))::INT as hours_waiting,
+      p.patient_id,
+      p.full_name as patient_name,
+      p.phone as patient_phone,
+      p.emergency_contact,
+      d.name as doctor_name,
+      dept.name as department
+    FROM admissions a
+    JOIN patients p ON a.patient_id = p.patient_id
+    LEFT JOIN doctors d ON a.doctor_id = d.doctor_id
+    LEFT JOIN departments dept ON d.dept_id = dept.dept_id
+    WHERE a.admission_status = 'waiting'
+    ORDER BY a.priority ASC, a.admitted_on ASC
+  `);
+  
+  console.log('[WAITING LIST REPORT] Found', result.rows.length, 'waiting admissions');
   
   // Group by department
   const byDepartment = {};
   result.rows.forEach(row => {
-    if (!byDepartment[row.department]) {
-      byDepartment[row.department] = [];
+    const dept = row.department || 'General';
+    if (!byDepartment[dept]) {
+      byDepartment[dept] = [];
     }
-    byDepartment[row.department].push(row);
+    byDepartment[dept].push(row);
   });
   
   res.json({
