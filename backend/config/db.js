@@ -5,17 +5,28 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Create PostgreSQL connection pool
-// Connection pooling improves performance by reusing connections
+// Dynamic Pool configuration supporting local DB and cloud DB (Neon, Render, Supabase, Railway, etc.)
+const isCloudDb = Boolean(process.env.DATABASE_URL || process.env.DB_SSL === 'true');
+
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
+    }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT, 10) || 5432,
+      database: process.env.DB_NAME || 'medicare',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    };
+
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'medicare',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD,
-  max: 20, // Maximum number of clients in the pool
+  ...poolConfig,
+  max: parseInt(process.env.DB_MAX_POOL, 10) || 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-  connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection cannot be established
+  connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection cannot be established
 });
 
 // Test database connection

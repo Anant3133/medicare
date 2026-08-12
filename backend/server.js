@@ -34,9 +34,30 @@ app.use(helmet());
 // Compression
 app.use(compression());
 
-// CORS configuration - Allow both 5173 and 5174
+// Dynamic CORS configuration - Allow localhost and deployed frontend URL
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g. Postman, mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (
+      !process.env.FRONTEND_URL ||
+      process.env.FRONTEND_URL === '*' ||
+      allowedOrigins.indexOf(origin) !== -1 ||
+      origin.endsWith('.vercel.app') ||
+      origin.endsWith('.onrender.com') ||
+      origin.endsWith('.netlify.app')
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   credentials: true
 }));
 
