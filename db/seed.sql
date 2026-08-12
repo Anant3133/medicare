@@ -67,25 +67,25 @@ INSERT INTO rooms (room_number, floor, room_type, capacity) VALUES
 ('303', 3, 'emergency', 2),
 ('304', 3, 'private', 1);
 
--- Insert Beds
+-- Insert Beds (Initial status 'available' so validation trigger allows admission seeding)
 INSERT INTO beds (bed_number, room_id, bed_type, status) VALUES
 -- Floor 1 General Rooms
-('A', 1, 'normal', 'occupied'),
+('A', 1, 'normal', 'available'),
 ('B', 1, 'normal', 'available'),
-('A', 2, 'normal', 'occupied'),
-('B', 2, 'normal', 'occupied'),
+('A', 2, 'normal', 'available'),
+('B', 2, 'normal', 'available'),
 ('A', 3, 'normal', 'available'),
 ('A', 4, 'normal', 'available'),
 ('B', 4, 'normal', 'maintenance'),
 -- Floor 2 ICU
-('A', 5, 'icu', 'occupied'),
-('A', 6, 'icu', 'occupied'),
+('A', 5, 'icu', 'available'),
+('A', 6, 'icu', 'available'),
 ('A', 7, 'icu', 'available'),
 ('A', 8, 'normal', 'available'),
 -- Floor 3
 ('A', 9, 'normal', 'available'),
 ('B', 9, 'normal', 'available'),
-('A', 10, 'normal', 'occupied'),
+('A', 10, 'normal', 'available'),
 ('B', 10, 'normal', 'available'),
 ('A', 11, 'normal', 'available'),
 ('B', 11, 'normal', 'available'),
@@ -115,6 +115,10 @@ INSERT INTO admissions (patient_id, bed_id, doctor_id, admitted_on, admission_st
 (4, 8, 7, now() - INTERVAL '1 day', 'active', 1, 'Respiratory distress', 'ICU monitoring required'),
 (5, 9, 7, now() - INTERVAL '4 days', 'active', 1, 'Septic shock', 'Critical condition'),
 (6, 14, 5, now() - INTERVAL '6 days', 'active', 5, 'Diabetes management', 'Insulin adjustment');
+
+-- Update bed status for active admissions to occupied
+UPDATE beds SET status = 'occupied' 
+WHERE bed_id IN (SELECT DISTINCT bed_id FROM admissions WHERE admission_status = 'active' AND bed_id IS NOT NULL);
 
 -- Insert Discharged Admissions (for billing and history)
 INSERT INTO admissions (patient_id, bed_id, doctor_id, admitted_on, discharged_on, admission_status, priority, diagnosis, notes) VALUES

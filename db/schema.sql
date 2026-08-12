@@ -5,6 +5,7 @@
 -- Drop tables if exist (for clean migration)
 DROP TABLE IF EXISTS audit_log CASCADE;
 DROP TABLE IF EXISTS waiting_list CASCADE;
+DROP TABLE IF EXISTS bill_items CASCADE;
 DROP TABLE IF EXISTS bills CASCADE;
 DROP TABLE IF EXISTS services CASCADE;
 DROP TABLE IF EXISTS admissions CASCADE;
