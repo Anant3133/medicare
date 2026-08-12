@@ -8,19 +8,23 @@ This document provides complete, step-by-step instructions to deploy the **Medic
 
 | Component | Technology Stack | Recommended Host | Free Tier Available? |
 | :--- | :--- | :--- | :--- |
-| **Database** | PostgreSQL 15+ | [Neon.tech](https://neon.tech) / Render DB | Yes |
+| **Database** | PostgreSQL 15+ | [Render DB](https://render.com) / [Neon.tech](https://neon.tech) | Yes |
 | **Backend API** | Node.js + Express | [Render.com](https://render.com) | Yes |
-| **Frontend** | React (Vite) + Tailwind | [Vercel](https://vercel.com) / Render | Yes |
+| **Frontend** | React (Vite) + Tailwind | [Render Static Site](https://render.com) / [Vercel](https://vercel.com) | Yes |
 
 ---
 
-## ⚡ Method 1: Render 1-Click Blueprint (Easiest & Fastest)
+## ⚡ Method 1: Render 1-Click Blueprint (Easiest & Recommended)
 
-This repository includes a `render.yaml` file that allows you to deploy the Database, Backend, and Frontend automatically in one click.
+This repository includes a pre-configured `render.yaml` file that allows you to deploy the Database, Backend, and Frontend automatically in one click.
 
 ### Steps:
-1. **Push your code to GitHub**:
-   - Create a repository on GitHub (public or private) and push your Medicare project code to it.
+1. **Commit & Push your updated code to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Fix render.yaml blueprint and deployment scripts"
+   git push origin master
+   ```
 
 2. **Connect to Render**:
    - Log into [Render.com](https://dashboard.render.com/).
@@ -28,22 +32,22 @@ This repository includes a `render.yaml` file that allows you to deploy the Data
 
 3. **Select your Repository**:
    - Connect your GitHub account and select your `medicare` repository.
-   - Render will detect the `render.yaml` file automatically.
+   - Render will parse `render.yaml` and show:
+     - `medicare-db` (PostgreSQL Database)
+     - `medicare-backend` (Node.js Web Service)
+     - `medicare-frontend` (Static Web App)
 
 4. **Deploy**:
-   - Click **Apply**. Render will provision:
-     - A PostgreSQL database (`medicare-db`)
-     - The Express Backend (`medicare-backend`)
-     - The React Frontend (`medicare-frontend`)
+   - Click **Apply**. Render will build and deploy all services automatically.
 
 5. **Initialize Database Tables & Seed Data**:
-   - Once the database and backend are deployed, open your local terminal (or Render backend Shell) and run:
+   - Once `medicare-db` and `medicare-backend` finish building, open **medicare-backend** service on Render.
+   - Click **Shell** in the left menu.
+   - Run:
      ```bash
-     # Set DATABASE_URL environment variable to your Render Postgres External Connection String
-     DATABASE_URL="postgres://user:password@host/medicare" npm run db:migrate
+     npm run db:migrate
      ```
-   - Alternatively, in Render backend Web Service settings, run shell command:
-     `npm run db:migrate`
+   - *This command populates all 11 tables, stored procedures, triggers, audit logs, indexes, views, and initial seed data automatically.*
 
 ---
 
@@ -67,7 +71,6 @@ npm run db:migrate
 # On Bash/Linux/Mac:
 DATABASE_URL="your_neon_connection_string_here" npm run db:migrate
 ```
-*This command creates all 11 normalized tables, stored procedures, triggers, audit logs, indexes, views, and initial seed data automatically.*
 
 ---
 
@@ -84,7 +87,7 @@ DATABASE_URL="your_neon_connection_string_here" npm run db:migrate
    - `DATABASE_URL`: *(Paste your Neon Connection String)*
    - `NODE_ENV`: `production`
    - `JWT_SECRET`: `your_super_secret_jwt_key_32_chars_long`
-   - `FRONTEND_URL`: `https://your-frontend-domain.vercel.app` *(or `*` temporarily)*
+   - `FRONTEND_URL`: `*`
 5. Click **Create Web Service**.
 6. Once deployed, note down your backend URL (e.g., `https://medicare-backend.onrender.com`).
 7. Test the health endpoint in your browser: `https://medicare-backend.onrender.com/health`.
@@ -100,9 +103,8 @@ DATABASE_URL="your_neon_connection_string_here" npm run db:migrate
    - **Root Directory**: Click Edit, select `frontend`.
 5. Expand **Environment Variables**:
    - **Name**: `VITE_API_URL`
-   - **Value**: `https://medicare-backend.onrender.com/api` *(Your Render Backend URL + `/api`)*
+   - **Value**: `https://medicare-backend.onrender.com/api`
 6. Click **Deploy**.
-7. Once deployed, Vercel will give you a domain (e.g. `https://medicare-frontend.vercel.app`).
 
 ---
 
@@ -115,20 +117,3 @@ Once your database migration script runs, you can log in using these default cre
 | **Admin** | `admin@medicare.com` | `admin123` |
 | **Doctor** | `doctor@medicare.com` | `doctor123` |
 | **Receptionist** | `receptionist@medicare.com` | `recep123` |
-
----
-
-## ⚙️ Summary of Local Verification Commands
-
-To verify everything locally before deploying:
-
-```bash
-# Install dependencies in root, backend, and frontend
-npm run install-all
-
-# Test database migration runner locally
-npm run db:migrate
-
-# Test frontend production build
-npm run start:frontend
-```

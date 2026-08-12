@@ -19,10 +19,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: medicare-frontend
-          property: url
+        value: "*"
 
   # 2. Frontend Static Web App
   - type: web
@@ -40,12 +37,11 @@ services:
         fromService:
           type: web
           name: medicare-backend
-          property: url
-          path: /api
+          property: host
 
 databases:
   # 3. PostgreSQL Database
   - name: medicare-db
     databaseName: medicare
-    user: postgres
+    user: medicare_user
     plan: free
